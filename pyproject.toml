@@ -6,7 +6,7 @@ authors = ["kshitijk <kshitij.kumbar@outlook.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.9.13"
+python = ">=3.9.13,<3.10"
 hopsworks = "^3.0.5"
 requests = "^2.30.0"
 pyarrow = "^12.0.0"
