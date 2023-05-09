@@ -6,17 +6,17 @@ authors = ["kshitijk <kshitij.kumbar@outlook.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-jupyter = "^1.0.0"
+python = "3.9.13"
+hopsworks = "^3.0.5"
 requests = "^2.30.0"
-pandas = "^2.0.1"
 pyarrow = "^12.0.0"
+pandas = "^2.0.1"
+python-dotenv = "^1.0.0"
+xgboost = "^1.7.5"
+lightgbm = "^3.3.5"
+optuna = "^3.1.1"
 tqdm = "^4.65.0"
-plotly = "^5.14.1"
 
-
-[tool.poetry.group.dev.dependencies]
-ipykernel = "^6.22.0"
 
 [build-system]
 requires = ["poetry-core"]
