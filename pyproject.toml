@@ -18,6 +18,7 @@ optuna = "^3.1.1"
 tqdm = "^4.65.0"
 streamlit = "^1.22.0"
 geopandas = "^0.13.0"
+jupyter = "^1.0.0"
 
 
 [build-system]
