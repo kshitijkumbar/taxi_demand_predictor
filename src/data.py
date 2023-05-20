@@ -91,11 +91,11 @@ def processRawData(
     """"""
     
     # Get all rides per location and pickup hour
-    rides['pickup_hour'] = rides['pickup_datetime'].dt.floor('H')
-    agg_rides = rides.groupby(['pickup_hour', 'pickup_loc_id']).size().reset_index()
+    rides['pickup_hr'] = rides['pickup_datetime'].dt.floor('H')
+    agg_rides = rides.groupby(['pickup_hr', 'pickup_loc_id']).size().reset_index()
     agg_rides.rename(columns={0:'rides'}, inplace=True)
     
-    # Add Rows for (locations, pickup_hours) with 0 rides
+    # Add Rows for (locations, pickup_hrs) with 0 rides
     agg_rides_all_slots = addMissingSlots(agg_rides)
     
     return agg_rides_all_slots
@@ -105,8 +105,8 @@ def addMissingSlots(aggregrate_rides: pd.DataFrame) -> pd.DataFrame:
 
     location_ids = aggregrate_rides['pickup_loc_id'].unique()
     full_range = pd.date_range(
-        aggregrate_rides['pickup_hour'].min(),
-        aggregrate_rides['pickup_hour'].max(),
+        aggregrate_rides['pickup_hr'].min(),
+        aggregrate_rides['pickup_hr'].max(),
         freq='H' 
     )
     output = pd.DataFrame()
@@ -114,10 +114,10 @@ def addMissingSlots(aggregrate_rides: pd.DataFrame) -> pd.DataFrame:
     for location_id in tqdm(location_ids):
         
         # Keep rides for specific id
-        aggregrate_rides_i = aggregrate_rides.loc[aggregrate_rides.pickup_loc_id == location_id, ['pickup_hour', 'rides']]
+        aggregrate_rides_i = aggregrate_rides.loc[aggregrate_rides.pickup_loc_id == location_id, ['pickup_hr', 'rides']]
         
         
-        aggregrate_rides_i.set_index('pickup_hour', inplace=True)
+        aggregrate_rides_i.set_index('pickup_hr', inplace=True)
         aggregrate_rides_i.index = pd.DatetimeIndex(aggregrate_rides_i.index)
         aggregrate_rides_i = aggregrate_rides_i.reindex(full_range, fill_value=0)
         
@@ -125,7 +125,7 @@ def addMissingSlots(aggregrate_rides: pd.DataFrame) -> pd.DataFrame:
         
         output = pd.concat([output, aggregrate_rides_i])
     
-    output = output.reset_index().rename(columns={'index': 'pickup_hour'})
+    output = output.reset_index().rename(columns={'index': 'pickup_hr'})
     
     return output
 
@@ -175,17 +175,17 @@ def processData2FeatTgt(
 
         x = np.ndarray(shape=(n_examples, n_features), dtype=np.float32)
         y = np.ndarray(shape=(n_examples), dtype=np.float32)
-        pickup_hours = []
+        pickup_hrs = []
 
         for i,idx in enumerate(indices):
             x[i,:] = ts_data_one_loc.iloc[idx[0]:idx[1]]['rides'].values
             y[i] = ts_data_one_loc.iloc[idx[1]:idx[2]]['rides'].values
-            pickup_hours.append(ts_data_one_loc.iloc[idx[1]]['pickup_hour'])
+            pickup_hrs.append(ts_data_one_loc.iloc[idx[1]]['pickup_hr'])
         feat_1_loc = pd.DataFrame(
             x,
             columns=[f"rides_prev_{i+1}_hr" for i in reversed(range(n_features))]
         )
-        feat_1_loc['pickup_hr'] = pickup_hours
+        feat_1_loc['pickup_hr'] = pickup_hrs
         feat_1_loc['location_id'] = loc_id
         
         tgt_1_loc = pd.DataFrame(y, columns=[f"tgt_rides_nxt_hr"])
