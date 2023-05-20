@@ -13,7 +13,7 @@ try:
 except:
     raise Exception("Create an .env file in the project root dir with the HOPSWORKS_API_KEY")
 
-FEATURE_GROUP_NAME = "ts_hourly_feature_group"
+FEATURE_GROUP_NAME = "ts_hourly_feat_group"
 FEATURE_GROUP_VERSION = 1
 FEATURE_VIEW_NAME = "ts_hourly_feat_view"
 FEATURE_VIEW_VERSION = 1
