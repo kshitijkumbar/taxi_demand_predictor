@@ -23,6 +23,7 @@ def avgRidesPerMonth(X: pd.DataFrame) -> pd.DataFrame:
 
     return X
 
+
 # Another way to add a transformation
 class TemporalFeatureEngineer(BaseEstimator, TransformerMixin):
     
