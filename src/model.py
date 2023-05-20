@@ -19,6 +19,7 @@ def avgRidesPerMonth(X: pd.DataFrame) -> pd.DataFrame:
                                 X[f'rides_prev_{2*7*24}_hr'] + \
                                 X[f'rides_prev_{3*7*24}_hr'] + \
                                 X[f'rides_prev_{4*7*24}_hr']) * 0.25
+    print(f"after adding avg rides {X.shape}")
 
     return X
 

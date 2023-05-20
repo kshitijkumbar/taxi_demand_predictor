@@ -24,7 +24,7 @@ def plotSample(
     
     # Plot for past values
     title = f"Pick up hour = {feats['pickup_hr']},\
-            location_id = {feats['location_id']}"
+            location_id = {feats['pickup_loc_id']}"
     
     fig = px.line(
         x=ts_dates,
