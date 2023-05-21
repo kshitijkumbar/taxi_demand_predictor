@@ -19,6 +19,7 @@ tqdm = "^4.65.0"
 streamlit = "^1.22.0"
 geopandas = "^0.13.0"
 jupyter = "^1.0.0"
+plotly = "^5.14.1"
 
 
 [build-system]
