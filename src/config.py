@@ -19,5 +19,11 @@ FEATURE_VIEW_NAME = "ts_hourly_feat_view"
 FEATURE_VIEW_VERSION = 1
 MODEL_NAME = "taxi_demand_predictor_next_hour"
 MODEL_VERSION = 2
+
 #Number of historical values our model needs to generate predictions
 N_FEATURES = 24 * 28
+
+# added for monitoring purposes
+FEATURE_GROUP_MODEL_PREDICTIONS = 'model_predictions_feature_group'
+FEATURE_VIEW_MODEL_PREDICTIONS = 'model_predictions_feature_view'
+FEATURE_VIEW_MONITORING = 'predictions_vs_actuals_for_monitoring_feature_view'
