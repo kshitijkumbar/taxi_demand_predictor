@@ -130,8 +130,8 @@ with st.spinner(text="Plotting time-series data"):
     for row_id in row_indices[:n_to_plot]:
         fig = plotSample(
             features=features,
-            targets=results["predicted_demand"],
             eg_id=row_id,
+            # targets=results["predicted_demand"],
             predictions=pd.Series(results["predicted_demand"])
         )
         st.plotly_chart(fig, theme="streamlit", use_container_width=True, width=100)

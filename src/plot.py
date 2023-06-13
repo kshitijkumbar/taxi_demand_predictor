@@ -5,14 +5,17 @@ import plotly.express as px
 
 def plotSample(
     features: pd.DataFrame,
-    targets: pd.DataFrame,
     eg_id: int,
+    targets: Optional[pd.DataFrame] = None,
     predictions: Optional[pd.Series] =None
 ):
     """"""
     feats = features.iloc[eg_id] 
-    tgt = targets.iloc[eg_id] 
-
+    if targets is not None:
+        tgt = targets.iloc[eg_id] 
+    else:
+        tgt = None
+    
     ts_columns = [col for col in features.columns if col.startswith('rides_prev_')]
     ts_values = [feats[col] for col in ts_columns] + [tgt]
     
@@ -35,15 +38,15 @@ def plotSample(
     )
     
     # Plotting target values
-    
-    fig.add_scatter(
-        x=ts_dates[-1:],
-        y=[tgt],
-        line_color='green',
-        mode='markers',
-        marker_size=10,
-        name='actual value' 
-    )
+    if targets is not None:
+        fig.add_scatter(
+            x=ts_dates[-1:],
+            y=[tgt],
+            line_color='green',
+            mode='markers',
+            marker_size=10,
+            name='actual value' 
+        )
     
     # Plot predictions if available
     if predictions is not None:
