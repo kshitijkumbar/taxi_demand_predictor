@@ -90,7 +90,7 @@ with st.spinner(text="Generating NYC Map"):
     
     INITIAL_VIEW_STATE = pdk.ViewState(
         latitude=40.7831,
-        longitude=73.9712,
+        longitude=-73.9712,
         zoom=11,
         max_zoom=16,
         pitch=45,
