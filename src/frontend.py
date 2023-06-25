@@ -109,6 +109,7 @@ with st.spinner(text="Generating NYC Map"):
         get_fill_color="fill_color",
         get_line_color=[255, 255, 255],
         auto_highlights=True,
+        pickable=True,
     )
     
     tooltip = {"html": "<b>Zone:</b> [{LocationID}]{zone} <br /> <b>Predicted rides:</b>{predicted_demand}"}
