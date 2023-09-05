@@ -80,6 +80,7 @@ def loadFeatBatchFromStore(
     )
     features["pickup_hr"] = current_date
     features["pickup_loc_id"] = location_ids
+    features.sort_values(by=['pickup_loc_id'], inplace=True)
     
     return features
 
@@ -100,3 +101,60 @@ def loadModelFromRegistry():
     model = joblib.load(Path(model_dir) / "model.pkl")
     
     return model 
+
+
+def loadPredsFromStore(from_pickup_hr: datetime,
+                       to_pickup_hr: datetime) -> pd.DataFrame:
+    """
+    Connect to feature store and retrieve model predictions fror all
+    pickup location ids and for the time period in args
+
+    Args:
+        from_pickup_hr (datetime): min datetime for requested predictions
+        to_pickup_hr (datetime): max datetime for requested predictions
+
+    Returns:
+        pd.DataFrame: 
+            - 'pickup_loc_id'
+            - 'predicted_demand'
+            - 'pickup_hr'
+    """
+    from src.feature_store_api import getFeatureStore
+    import src.config as config
+    
+    
+    feat_store = getFeatStore()
+    
+    pred_fg = feat_store.get_feature_group(
+        name=config.FEATURE_GROUP_MODEL_PREDICTIONS,
+        version=1,
+    )
+    
+    try:
+        feat_store.create_feature_view(
+            name=config.FEATURE_VIEW_MODEL_PREDICTIONS,
+            version=1,
+            query=pred_fg.select_all()
+        )
+    except:
+        print(f'Feature view {config.FEATURE_VIEW_MODEL_PREDICTIONS} \
+            already existed. Skipped creation.')
+    
+    pred_fv = feat_store.get_feature_view(
+        name=config.FEATURE_VIEW_MODEL_PREDICTIONS,
+        version=1
+    )    
+    
+    print(f"Fetching predictions for pickup_hours between \
+          {from_pickup_hr} to {to_pickup_hr}")
+    
+    preds = pred_fv.get_batch_data(
+        start_time=from_pickup_hr - timedelta(days=1),
+        end_time=to_pickup_hr + timedelta(days=1)
+    )
+    
+    preds = preds[preds.pickup_hr.between(from_pickup_hr, to_pickup_hr)]
+    
+    preds.sort_values(by=['pickup_hr', 'pickup_loc_id'], inplace=True)
+    
+    return preds
